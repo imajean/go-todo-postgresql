@@ -71,14 +71,16 @@ func UpdateTodo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var updatedTodo models.Todo
-	updatedTodo.ID = todo.ID
 	json.NewDecoder(r.Body).Decode(&updatedTodo)
 
+	todo.Title = updatedTodo.Title
+	todo.Done = updatedTodo.Done
+
 	fmt.Println("TODO", todo)
-	db().Save(&updatedTodo)
+	db().Save(&todo)
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(updatedTodo)
+	json.NewEncoder(w).Encode(todo)
 }
 
 func DeleteTodo(w http.ResponseWriter, r *http.Request) {
